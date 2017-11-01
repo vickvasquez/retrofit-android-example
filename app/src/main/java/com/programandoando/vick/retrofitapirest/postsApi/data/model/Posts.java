@@ -1,4 +1,4 @@
-package com.programandoando.vick.retrofitapirest.postsApi;
+package com.programandoando.vick.retrofitapirest.postsApi.data.model;
 
 //import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;

@@ -1,6 +1,7 @@
-package com.programandoando.vick.retrofitapirest.postsApi;
+package com.programandoando.vick.retrofitapirest.postsApi.data.api.retrofit;
 
-import java.util.logging.Level;
+import com.programandoando.vick.retrofitapirest.postsApi.data.api.Constants;
+import com.programandoando.vick.retrofitapirest.postsApi.data.api.client.Service;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -17,7 +18,7 @@ public class RestApiAdapter {
 
     OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)).build();
 
-    public  Service getClientService() {
+    public Service getClientService() {
         Retrofit retrofit= new Retrofit.Builder()
                 .baseUrl(Constants.ROOT_URL)
                 .client(client)

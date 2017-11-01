@@ -17,9 +17,13 @@ import retrofit2.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.programandoando.vick.retrofitapirest.postsApi.Posts;
-import com.programandoando.vick.retrofitapirest.postsApi.RestApiAdapter;
-import com.programandoando.vick.retrofitapirest.postsApi.Service;
+import com.google.gson.JsonObject;
+import com.programandoando.vick.retrofitapirest.postsApi.data.model.Comments;
+import com.programandoando.vick.retrofitapirest.postsApi.data.model.Posts;
+import com.programandoando.vick.retrofitapirest.postsApi.data.api.retrofit.RestApiAdapter;
+import com.programandoando.vick.retrofitapirest.postsApi.data.api.client.Service;
+import com.programandoando.vick.retrofitapirest.postsApi.data.model.SinglePost;
+import com.programandoando.vick.retrofitapirest.postsApi.data.model.Users;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        getPosts();
+        getUsers();
+        //getSinglePost();
+        //getPosts();
+        //getComments();
     }
 
     @Override
@@ -69,7 +76,88 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getPosts() {
+    private void getUsers() {
+        RestApiAdapter restApiAdapter = new RestApiAdapter();
+
+        Service service = restApiAdapter.getClientService();
+
+        Call<JsonArray> users = service.getUsers();
+
+        users.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray usersResponse = response.body().getAsJsonArray();
+
+                Gson gson = new Gson();
+
+                Users usersData[] = gson.fromJson(usersResponse.toString(),Users[].class);
+
+                List<Users> userModel = Arrays.asList(usersData);
+
+                Log.w(TAG,"Usuario 1 "+ userModel.get(0).toString());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getSinglePost() {
+        RestApiAdapter restApiAdapter = new RestApiAdapter();
+
+        Service service = restApiAdapter.getClientService();
+
+        Call<JsonObject> postSingle = service.getPostSingle(2);
+
+        postSingle.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject dataSinglePost = response.body().getAsJsonObject();
+
+                Gson gson = new Gson();
+                SinglePost singlePostData = gson.fromJson(dataSinglePost.toString(),SinglePost.class);
+                Log.w(TAG,"Post 2 => "+ singlePostData.toString());
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getComments() {
+
+        RestApiAdapter restApiAdapter = new RestApiAdapter();
+
+        Service service = restApiAdapter.getClientService();
+
+        Call<JsonArray> call = service.getComments();
+
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray comments = response.body().getAsJsonArray();
+
+                Gson gson = new Gson();
+
+                Comments[] comment = gson.fromJson(comments.toString(),Comments[].class);
+                List<Comments> modelComments = Arrays.asList(comment);
+
+                Log.w(TAG,"Comentario uno "+ modelComments.get(0).toString());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getPosts()  {
 
         RestApiAdapter restApiAdapter = new RestApiAdapter();
 
@@ -84,9 +172,9 @@ public class MainActivity extends AppCompatActivity {
                 JsonArray posts = response.body().getAsJsonArray();
                 Gson gson = new Gson();
                 Posts[] post = gson.fromJson(posts.toString(), Posts[].class);
-                Arrays.asList(post);
+                List<Posts> modelPost =  Arrays.asList(post);
 
-                //Log.d(TAG, "onResponse: " + postList.get(0).toString() );
+                Log.w(TAG, "onResponse: " + modelPost.get(0).toString() );
             }
 
             @Override
